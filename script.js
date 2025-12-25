@@ -64,8 +64,8 @@ IMPORTANT RULES:
     // Initialize Supabase client
     initSupabase() {
         // Hardcoded Supabase config for cross-domain access
-        const SUPABASE_URL = 'https://brwgyojtthrrenhxlsio.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJyd2d5b2p0dGhycmVuaHhsc2lvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY1NjE4ODIsImV4cCI6MjA4MjEzNzg4Mn0.gMEw6OqFcfhLQ8dEeOHRfXE431N2ZJVi7dQdcUq1yHM';
+        const SUPABASE_URL = 'https://zrdxuqsibdpectxuhopv.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpyZHh1cXNpYmRwZWN0eHVob3B2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY2NDU0NTEsImV4cCI6MjA4MjIyMTQ1MX0.a9Qk7ZFODgc0Q1zh9t3VWStX4-pg11RjlieQ3JASxyY';
 
         // Use hardcoded or localStorage
         const url = SUPABASE_URL || localStorage.getItem('supabase_url');

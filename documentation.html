@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Chatbot - Complete Setup Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            color: #6366f1;
+            font-size: 28px;
+            margin-bottom: 10px;
+            border-bottom: 3px solid #6366f1;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #4f46e5;
+            font-size: 20px;
+            margin: 30px 0 15px;
+            border-left: 4px solid #6366f1;
+            padding-left: 12px;
+        }
+
+        h3 {
+            color: #7c3aed;
+            font-size: 16px;
+            margin: 20px 0 10px;
+        }
+
+        p {
+            margin: 10px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        th,
+        td {
+            border: 1px solid #e5e7eb;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background: #f3f4f6;
+            font-weight: 600;
+        }
+
+        code {
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: Consolas, monospace;
+            font-size: 13px;
+        }
+
+        pre {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-size: 12px;
+        }
+
+        pre code {
+            background: none;
+            color: inherit;
+        }
+
+        .highlight {
+            background: #fef3c7;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #f59e0b;
+            margin: 15px 0;
+        }
+
+        .success {
+            background: #d1fae5;
+            border-left-color: #10b981;
+        }
+
+        .danger {
+            background: #fee2e2;
+            border-left-color: #ef4444;
+        }
+
+        ul,
+        ol {
+            margin: 10px 0 10px 25px;
+        }
+
+        li {
+            margin: 5px 0;
+        }
+
+        .page-break {
+            page-break-before: always;
+        }
+
+        @media print {
+            body {
+                padding: 20px;
+                font-size: 11px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            h2 {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🛒 Shop Assistant Chatbot</h1>
+    <p><strong>Complete Setup & Integration Guide</strong></p>
+    <p>Created: December 2024</p>
+
+    <h2>📁 Project Files</h2>
+    <table>
+        <tr>
+            <th>File</th>
+            <th>Purpose</th>
+        </tr>
+        <tr>
+            <td><code>index.html</code></td>
+            <td>User-facing chatbot widget</td>
+        </tr>
+        <tr>
+            <td><code>admin.html</code></td>
+            <td>Admin panel - manage products & API config</td>
+        </tr>
+        <tr>
+            <td><code>widget.js</code></td>
+            <td>Floating button embed script</td>
+        </tr>
+        <tr>
+            <td><code>script.js</code></td>
+            <td>Chatbot logic</td>
+        </tr>
+        <tr>
+            <td><code>rag-backend.js</code></td>
+            <td>Product database handler</td>
+        </tr>
+        <tr>
+            <td><code>style.css</code></td>
+            <td>Chatbot styling</td>
+        </tr>
+    </table>
+
+    <h2>🔗 Live URLs</h2>
+    <table>
+        <tr>
+            <th>Page</th>
+            <th>URL</th>
+        </tr>
+        <tr>
+            <td>Admin Panel</td>
+            <td><code>https://manojaberathna24.github.io/Testing_Webchat/admin.html</code></td>
+        </tr>
+        <tr>
+            <td>Chatbot</td>
+            <td><code>https://manojaberathna24.github.io/Testing_Webchat/index.html</code></td>
+        </tr>
+        <tr>
+            <td>Widget Script</td>
+            <td><code>https://manojaberathna24.github.io/Testing_Webchat/widget.js</code></td>
+        </tr>
+    </table>
+
+    <h2>⚙️ Initial Setup (One Time)</h2>
+
+    <h3>Step 1: Supabase Database</h3>
+    <ol>
+        <li>Go to <strong>supabase.com</strong> → Sign up (FREE)</li>
+        <li>Create new project</li>
+        <li>SQL Editor → Run this query:</li>
+    </ol>
+    <pre><code>CREATE TABLE products (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  price TEXT,
+  category TEXT,
+  stock TEXT DEFAULT 'In Stock',
+  description TEXT,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE config (
+  id SERIAL PRIMARY KEY,
+  key TEXT UNIQUE NOT NULL,
+  value TEXT,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Enable public access
+ALTER TABLE products ENABLE ROW LEVEL SECURITY;
+ALTER TABLE config ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Public read" ON products FOR SELECT USING (true);
+CREATE POLICY "Public insert" ON products FOR INSERT WITH CHECK (true);
+CREATE POLICY "Public update" ON products FOR UPDATE USING (true);
+CREATE POLICY "Public delete" ON products FOR DELETE USING (true);
+
+CREATE POLICY "Public read" ON config FOR SELECT USING (true);
+CREATE POLICY "Public insert" ON config FOR INSERT WITH CHECK (true);
+CREATE POLICY "Public update" ON config FOR UPDATE USING (true);</code></pre>
+
+    <h3>Step 2: Get Supabase Credentials</h3>
+    <ol>
+        <li>Settings → API → Copy <strong>Project URL</strong></li>
+        <li>Settings → API Keys → Click "Legacy anon, service_role API keys"</li>
+        <li>Copy <strong>anon</strong> key (starts with <code>eyJ...</code>)</li>
+    </ol>
+
+    <h3>Step 3: Get OpenRouter API Key</h3>
+    <ol>
+        <li>Go to <strong>openrouter.ai/keys</strong></li>
+        <li>Sign up / Login</li>
+        <li>Create new API key (FREE models available)</li>
+    </ol>
+
+    <div class="page-break"></div>
+
+    <h2>🔧 Admin Panel Usage</h2>
+
+    <h3>First Time Setup</h3>
+    <ol>
+        <li>Open: <code>https://manojaberathna24.github.io/Testing_Webchat/admin.html</code></li>
+        <li>Enter Supabase URL & Key → Click <strong>Connect</strong></li>
+        <li>Enter OpenRouter API Key → Select Model → Click <strong>Save AI Config</strong></li>
+        <li>Add products manually or upload CSV/Excel</li>
+    </ol>
+
+    <h3>Managing Products</h3>
+    <table>
+        <tr>
+            <th>Method</th>
+            <th>How</th>
+        </tr>
+        <tr>
+            <td>Manual</td>
+            <td>Fill form → Add Product</td>
+        </tr>
+        <tr>
+            <td>CSV Upload</td>
+            <td>Upload .csv file with columns: name, price, category, stock, description</td>
+        </tr>
+        <tr>
+            <td>Excel Upload</td>
+            <td>Upload .xlsx file with same columns</td>
+        </tr>
+    </table>
+
+    <h2>📤 Embed in Website</h2>
+
+    <h3>Option 1: Floating Button (Recommended)</h3>
+    <p>Add this <strong>single line</strong> before <code>&lt;/body&gt;</code>:</p>
+    <pre><code>&lt;script src="https://manojaberathna24.github.io/Testing_Webchat/widget.js"&gt;&lt;/script&gt;</code></pre>
+
+    <h3>Option 2: Always Visible</h3>
+    <pre><code>&lt;iframe src="https://manojaberathna24.github.io/Testing_Webchat/index.html" 
+    style="position:fixed;bottom:20px;right:20px;width:350px;height:450px;
+    border:none;border-radius:16px;z-index:9999;"&gt;
+&lt;/iframe&gt;</code></pre>
+
+    <h2>🎨 Widget Customization</h2>
+    <p>Edit <code>widget.js</code> to customize:</p>
+
+    <h3>Button Colors (Line 15)</h3>
+    <table>
+        <tr>
+            <th>Color</th>
+            <th>Code</th>
+        </tr>
+        <tr>
+            <td>🔵 Blue</td>
+            <td><code>#3b82f6, #1d4ed8</code></td>
+        </tr>
+        <tr>
+            <td>🟢 Green</td>
+            <td><code>#10b981, #059669</code></td>
+        </tr>
+        <tr>
+            <td>🔴 Red</td>
+            <td><code>#ef4444, #dc2626</code></td>
+        </tr>
+        <tr>
+            <td>🟠 Orange</td>
+            <td><code>#f97316, #ea580c</code></td>
+        </tr>
+        <tr>
+            <td>🟣 Purple</td>
+            <td><code>#6366f1, #a855f7</code> (default)</td>
+        </tr>
+    </table>
+
+    <h3>Button Size (Lines 11-12)</h3>
+    <pre><code>width: 60px;   // Change to 70px for bigger
+height: 60px;</code></pre>
+
+    <div class="page-break"></div>
+
+    <h2>🔄 How It Works</h2>
+    <div class="highlight success">
+        <strong>Real-time Flow:</strong><br>
+        Admin adds product → Supabase Database → Chatbot reads instantly!<br>
+        No manual refresh needed.
+    </div>
+
+    <h2>❓ Troubleshooting</h2>
+    <table>
+        <tr>
+            <th>Problem</th>
+            <th>Solution</th>
+        </tr>
+        <tr>
+            <td>"User not found" error</td>
+            <td>Check OpenRouter API key in admin panel</td>
+        </tr>
+        <tr>
+            <td>Admin not connecting</td>
+            <td>Use Legacy anon key (eyJ...), not new key format</td>
+        </tr>
+        <tr>
+            <td>Chatbot not responding</td>
+            <td>Ensure API key is saved in admin panel</td>
+        </tr>
+        <tr>
+            <td>Old version showing</td>
+            <td>Hard refresh: Ctrl+Shift+R</td>
+        </tr>
+        <tr>
+            <td>404 error</td>
+            <td>Wait 1-2 min for GitHub Pages deploy</td>
+        </tr>
+    </table>
+
+    <h2>🔐 Security Notes</h2>
+    <div class="highlight danger">
+        <strong>Important:</strong>
+        <ul>
+            <li>Never share your OpenRouter API key publicly</li>
+            <li>Supabase anon key is safe for client-side use (with RLS enabled)</li>
+            <li>Admin panel URL should be kept private</li>
+        </ul>
+    </div>
+
+    <h2>📞 Quick Reference</h2>
+    <table>
+        <tr>
+            <th>Task</th>
+            <th>Where</th>
+        </tr>
+        <tr>
+            <td>Add/Edit Products</td>
+            <td>Admin Panel</td>
+        </tr>
+        <tr>
+            <td>Change API Key</td>
+            <td>Admin Panel → OpenRouter Config</td>
+        </tr>
+        <tr>
+            <td>View Database</td>
+            <td>Supabase Dashboard</td>
+        </tr>
+        <tr>
+            <td>Update Widget Style</td>
+            <td>Edit widget.js → Push to GitHub</td>
+        </tr>
+    </table>
+
+    <hr style="margin: 40px 0;">
+    <p style="text-align: center; color: #94a3b8; font-size: 12px;">
+        Shop Assistant Chatbot - Created December 2024<br>
+        GitHub: manojaberathna24/Testing_Webchat
+    </p>
+</body>
+
+</html>

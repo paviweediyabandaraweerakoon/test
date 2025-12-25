@@ -1,0 +1,23 @@
+[
+  {
+    "name": "iPhone 15 Pro",
+    "price": "Rs. 450,000",
+    "category": "Smartphones",
+    "stock": "In Stock",
+    "description": "Latest Apple smartphone with A17 Pro chip, 48MP camera, titanium design"
+  },
+  {
+    "name": "Samsung Galaxy S24 Ultra",
+    "price": "Rs. 420,000",
+    "category": "Smartphones",
+    "stock": "In Stock",
+    "description": "Samsung flagship with Galaxy AI, S Pen, 200MP camera"
+  },
+  {
+    "name": "MacBook Pro 14",
+    "price": "Rs. 680,000",
+    "category": "Laptops",
+    "stock": "Low Stock",
+    "description": "Apple M3 Pro chip, 14-inch Liquid Retina XDR display"
+  }
+]

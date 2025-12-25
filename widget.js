@@ -2,7 +2,7 @@
 // Add this script to any website to embed the chatbot
 (function () {
     // Configuration
-    const CHATBOT_URL = 'https://paviweediyabandaraweerakoon.github.io/test/idex.html';
+    const CHATBOT_URL = 'https://paviweediyabandaraweerakoon.github.io/test/index.html';
 
     // Create styles
     const style = document.createElement('style');
@@ -102,4 +102,5 @@
         iframe.classList.toggle('open', isOpen);
     });
 })();
+
 

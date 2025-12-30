@@ -49,7 +49,7 @@ IMPORTANT RULES:
         }
 
         // Fallback to localStorage (same domain only)
-        this.apiKey = localStorage.getItem('openrouter_api_key') || '';
+        this.apiKey = localStorage.getItem('openrouter_api_key') || this.apiKey;
         this.model = localStorage.getItem('chatbot_model') || 'meta-llama/llama-3.2-3b-instruct:free';
 
         // Fallback to config.js if exists
